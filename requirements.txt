@@ -1,0 +1,9 @@
+onnx
+onnxruntime
+numpy
+matplotlib
+opencv-python
+jupyter
+jupytext
+googledrivedownloader
+requests
