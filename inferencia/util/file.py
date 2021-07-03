@@ -23,7 +23,7 @@ def get_model_path(task_major_name,
                    model_detail_name,
                    model_precision):
     model_dir = osp.join(osp.expanduser("~"),
-                         '.onnx_infer',
+                         '.inferencia',
                          task_major_name,
                          task_minor_name,
                          model_name,

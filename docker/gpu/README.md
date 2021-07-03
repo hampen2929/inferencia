@@ -1,7 +1,7 @@
 # Docker
 ## GPU
 ```
-docker build -t onnx_infer_gpu ./
+docker build -t inferencia_gpu ./
 ```
 
 ```
@@ -9,11 +9,11 @@ docker run \
     --runtime=nvidia \
     -it \
     --rm \
-    --name onnx_infer_gpu \
+    --name inferencia_gpu \
     -e DISPLAY=$DISPLAY \
     -v /tmp/.X11-unix:/tmp/.X11-uni \
-    -v $HOME/workspace/onnx_infer/:/workspace \
+    -v $HOME/workspace/inferencia/:/workspace \
     --net=host \
-    onnx_infer_gpu \
+    inferencia_gpu \
     /bin/bash
 ```

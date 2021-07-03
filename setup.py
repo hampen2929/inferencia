@@ -2,7 +2,7 @@ import codecs
 import os
 from setuptools import setup, find_packages
 
-PACKAGE = 'onnx_infer'
+PACKAGE = 'inferencia'
 README = 'README.md'
 REQUIREMENTS = 'requirements.txt'
 
@@ -16,11 +16,12 @@ def read(fname):
     return codecs.open(os.path.join(os.path.dirname(__file__), fname),
                        encoding='utf-8').read()
 
+
 setup(name=PACKAGE,
       version=VERSION,
       # long_description=read(README),
       install_requires=list(read(REQUIREMENTS).splitlines()),
-      url='https://github.com/hampen2929/onnx_infer',
+      url='https://github.com/hampen2929/inferencia',
       author='hampen2929',
       author_email='yuya.mochimaru.ym@gmail.com',
       packages=find_packages(),

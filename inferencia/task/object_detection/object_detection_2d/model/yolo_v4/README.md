@@ -1,11 +1,11 @@
 # Docker
 docker run --gpus all -it \
     --rm \
-    --name onnx_infer_yolo \
+    --name inferencia_yolo \
     -e DISPLAY=$DISPLAY \
     -v /tmp/.X11-unix:/tmp/.X11-uni \
     --net=host \
-    onnx_infer_gpu \
+    inferencia_gpu \
     /bin/bash
 
 # Pytorch2ONNX

@@ -1,4 +1,4 @@
-from onnx_infer.util.file import download_from_google_drive
+from inferencia.util.file import download_from_google_drive
 import os.path as osp
 from typing import Union
 
