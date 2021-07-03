@@ -1,6 +1,6 @@
 from enum import Enum
 
 
-class LabelNames(Enum):
+class ObjectDetection2DLabelNames(Enum):
     coco = "COCO"
     pascalvoc = "pascalvoc"

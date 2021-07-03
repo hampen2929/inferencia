@@ -3,7 +3,7 @@ import numpy as np
 
 
 @dataclass
-class ObjectDetectionResult:
+class ObjectDetection2DResult:
     class_id: int
     class_name: str
     xmin: int

@@ -9,15 +9,15 @@ from .process import (pre_process,
                       validate_image,
                       validate_bbox)
 
-from ..object_detection_model import ObjectDetectionModel
-from ..object_detection_result import ObjectDetectionResult
-from ...label.label_factory import LabelFactory
+from ..object_detection_2d_model import ObjectDetection2DModel
+from ..object_detection_2d_result import ObjectDetection2DResult
+from ...label.object_detection_2d_label_factory import ObjectDetection2DLabelFactory
 
 from ......util.file import get_model_path, download_from_google_drive
 from ......util.file import download_from_google_drive
 
 
-class YoloV4(ObjectDetectionModel):
+class YoloV4(ObjectDetection2DModel):
     input_width = None
     input_height = None
 
@@ -48,7 +48,7 @@ class YoloV4(ObjectDetectionModel):
                                          model_precision)
         self.download_model(self.weight_url, model_path)
         self.sess = self.get_inference_session(model_path)
-        self.label = LabelFactory.create(label_name)
+        self.label = ObjectDetection2DLabelFactory.create(label_name)
 
     def get_model_path(self,
                        model_path,
@@ -108,12 +108,12 @@ class YoloV4(ObjectDetectionModel):
                                                        ymax,
                                                        image_height,
                                                        image_width)
-                obj_det_ret = ObjectDetectionResult(class_id,
-                                                    self.label[class_id],
-                                                    xmin,
-                                                    ymin,
-                                                    xmax,
-                                                    ymax,
-                                                    confidence)
+                obj_det_ret = ObjectDetection2DResult(class_id,
+                                                      self.label[class_id],
+                                                      xmin,
+                                                      ymin,
+                                                      xmax,
+                                                      ymax,
+                                                      confidence)
                 obj_det_rets.append(obj_det_ret)
         return obj_det_rets

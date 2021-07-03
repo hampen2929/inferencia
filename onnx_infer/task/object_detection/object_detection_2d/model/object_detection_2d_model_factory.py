@@ -1,9 +1,9 @@
-from .model_names import ModelName
+from .object_detection_2d_model_name import ModelName
 
 
-class ObjectDetectionModelFactory():
+class ObjectDetection2DModelFactory():
     def create(model_name="YoloV4",
-               model_patpose_estimation_2dh=None,
+               model_path=None,
                model_precision="FP32",
                conf_thresh=0.2,
                nms_thresh=0.4,

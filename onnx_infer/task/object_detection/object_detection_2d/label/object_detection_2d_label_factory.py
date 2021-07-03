@@ -1,13 +1,13 @@
-from ..label.label_names import LabelNames
+from ..label.object_detection_2d_label_name import ObjectDetection2DLabelNames
 
 
-class LabelFactory():
+class ObjectDetection2DLabelFactory():
     def create(label_name):
-        if LabelNames.coco.value == label_name:
+        if ObjectDetection2DLabelNames.coco.value == label_name:
             from ..label.coco_label import COCOLabel
             return COCOLabel
 
-        elif LabelNames.pascalvoc.value == label_name:
+        elif ObjectDetection2DLabelNames.pascalvoc.value == label_name:
             raise NotImplementedError(
                 "{} is not implemented.".format(label_name))
 

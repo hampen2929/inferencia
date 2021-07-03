@@ -3,7 +3,7 @@ from typing import Union
 import numpy as np
 
 
-class ObjectDetectionModel(metaclass=ABCMeta):
+class ObjectDetection2DModel(metaclass=ABCMeta):
 
     @abstractmethod
     def pre_process():

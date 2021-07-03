@@ -1,14 +1,11 @@
 from .visualize_bbox import visualize_bbox
 
 
-class ObjectDetectionVisualizer():
-    def __init__(self,
-                 bbox_color=(0, 75, 255),
-                 text_color=(0, 0, 0)):
-        self.bbox_color = bbox_color
-        self.text_color = text_color
-
-    def visualize(self, image, object_detection_results: list):
+class ObjectDetection2DVisualizer():
+    def visualize(image,
+                  object_detection_results: list,
+                  bbox_color=(0, 75, 255),
+                  text_color=(0, 0, 0)):
         for object_detection_result in object_detection_results:
             visualize_bbox(image,
                            object_detection_result.class_name,
@@ -17,6 +14,6 @@ class ObjectDetectionVisualizer():
                            object_detection_result.xmax,
                            object_detection_result.ymax,
                            object_detection_result.confidence,
-                           bbox_color=self.bbox_color,
-                           text_color=self.text_color)
+                           bbox_color=bbox_color,
+                           text_color=text_color)
         return image
