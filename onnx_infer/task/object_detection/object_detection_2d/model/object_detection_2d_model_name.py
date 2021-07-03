@@ -1,6 +1,6 @@
 from enum import Enum
 
 
-class ModelName(Enum):
+class ObjectDetection2DModelName(Enum):
     yolov4 = "YoloV4"
     centernet = "CenterNet"
