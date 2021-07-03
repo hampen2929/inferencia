@@ -1,4 +1,4 @@
-from .pose_estimation_model_name import PoseEstimationModelName
+from .pose_estimation_2d_model_name import PoseEstimationModelName
 
 
 class PoseEstimation2DFactory():
