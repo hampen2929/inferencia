@@ -1,4 +1,3 @@
-from inferencia.util.file import download_from_google_drive
 import os.path as osp
 from typing import Union
 
@@ -10,7 +9,9 @@ from ...pose_estimation_2d_model import PoseEstimation2dModel
 from ...pose_estimation_2d_result import PoseEstimation2dResult
 
 from .process import change_ratio
-from .......util.file import get_model_path
+
+from inferencia.util.file.file import get_model_path
+from inferencia.util.file.file import download_from_google_drive
 
 
 class MoveNet(PoseEstimation2dModel):
@@ -42,9 +43,7 @@ class MoveNet(PoseEstimation2dModel):
         return onnxruntime.InferenceSession(model_path)
 
     def inference(self, images: Union[np.ndarray, list]) -> list:
-        print(images.shape)
         pre_process_results, height, width = self.pre_process(images)
-        print(height, width)
         forward_results = self.forward(pre_process_results)
         return self.post_process(forward_results, height, width)
 
