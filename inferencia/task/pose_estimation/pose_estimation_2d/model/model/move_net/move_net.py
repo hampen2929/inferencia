@@ -21,6 +21,7 @@ class MoveNet(PoseEstimation2dModel):
     model_name = 'MoveNet'
     model_detail_name = None
     weight_url = None
+    change_ratio = 16 / 9
 
     def __init__(self,
                  model_path,
@@ -41,7 +42,9 @@ class MoveNet(PoseEstimation2dModel):
         return onnxruntime.InferenceSession(model_path)
 
     def inference(self, images: Union[np.ndarray, list]) -> list:
+        print(images.shape)
         pre_process_results, height, width = self.pre_process(images)
+        print(height, width)
         forward_results = self.forward(pre_process_results)
         return self.post_process(forward_results, height, width)
 
@@ -52,7 +55,11 @@ class MoveNet(PoseEstimation2dModel):
         elif len(images.shape) == 4:
             _, height, width, _ = images.shape
 
-        images, height, width = change_ratio(images, height, width)
+        # 人を検出した縦長の矩形だと姿勢推定がうまくいかないことがあるので横長の比率に変更
+        images, height, width = change_ratio(images,
+                                             height,
+                                             width,
+                                             change_ratio=self.change_ratio)
         frame = cv2.resize(images, (self.in_w, self.in_h))
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         frame = np.expand_dims(frame, axis=0)
