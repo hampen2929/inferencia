@@ -13,30 +13,32 @@ from ...object_detection_2d_model import ObjectDetection2DModel
 from ...object_detection_2d_result import ObjectDetection2DResult
 from ....label.object_detection_2d_label_factory import ObjectDetection2DLabelFactory
 
-from .......util.file import get_model_path, download_from_google_drive
-from .......util.file import download_from_google_drive
+from .......util.file.file import get_model_path, download_from_google_drive
+from .......util.file.file import download_from_google_drive
+from .......util.logger.logger import Logger
 
 
 class YoloV4(ObjectDetection2DModel):
+    task_major_name = "ObjectDetection"
+    task_minor_name = "ObjectDetection2D"
+    model_name = "YoloV4"
+    model_detail_name = None
     input_width = None
     input_height = None
-
-    input_width = 416
-    input_height = 416
-
-    task_major_name = "ObjectDetection"
-    task_minor_name = "ObjectDetection"
-    model_name = "YoloV4"
-    model_detail_name = "YoloV4"
-    weight_url = "1SFW44cFCpgRzVPNYAdDauaJcF4w7ufG8"
+    weight_url = None
 
     def __init__(self,
-                 model_path=None,
-                 model_precision="FP32",
-                 conf_thresh=0.2,
-                 nms_thresh=0.4,
-                 label_name="COCO"
-                 ):
+                 model_path,
+                 model_precision,
+                 conf_thresh,
+                 nms_thresh,
+                 label_name):
+        self.logger = Logger(__class__.__name__)
+        init_msg = "\n===================== \n Initialize {}-{}-{} \n=====================\n".format(self.task_minor_name,
+                                                                                                     self.model_name,
+                                                                                                     self.model_detail_name)
+        self.logger.info(init_msg)
+
         self.conf_thresh = conf_thresh
         self.nms_thresh = nms_thresh
 
@@ -48,7 +50,14 @@ class YoloV4(ObjectDetection2DModel):
                                          model_precision)
         self.download_model(self.weight_url, model_path)
         self.sess = self.get_inference_session(model_path)
-        self.label = ObjectDetection2DLabelFactory.create(label_name)
+
+        # First inference is too slow. Should be done here.
+        dummy_image = self.get_dummy_image()
+        self.inference(dummy_image)
+        self.logger.info("Initial inference")
+
+        label = ObjectDetection2DLabelFactory.create(label_name)
+        self.label_dict = label.to_json()
 
     def get_model_path(self,
                        model_path,
@@ -70,6 +79,9 @@ class YoloV4(ObjectDetection2DModel):
     def download_model(self, weight_url, model_path):
         if not osp.exists(model_path):
             download_from_google_drive(weight_url, model_path)
+            msg = "download weight from {weight_url} and save to {model_path}".format(weight_url=weight_url,
+                                                                                      model_path=model_path)
+            self.logger.info(msg)
 
     def get_inference_session(self, model_path):
         return onnxruntime.InferenceSession(model_path)
@@ -89,8 +101,7 @@ class YoloV4(ObjectDetection2DModel):
         return pre_proc_rets, image_sizes
 
     def forward(self, images):
-        input_name = self.sess.get_inputs()[0].name
-        output = self.sess.run(None, {input_name: images})
+        output = self.sess.run(None, {self.sess.get_inputs()[0].name: images})
         return output
 
     def post_process(self, fwd_rets, image_sizes):
@@ -109,7 +120,7 @@ class YoloV4(ObjectDetection2DModel):
                                                        image_height,
                                                        image_width)
                 obj_det_ret = ObjectDetection2DResult(class_id,
-                                                      self.label[class_id],
+                                                      self.label_dict[class_id],
                                                       xmin,
                                                       ymin,
                                                       xmax,
@@ -117,3 +128,10 @@ class YoloV4(ObjectDetection2DModel):
                                                       confidence)
                 obj_det_rets.append(obj_det_ret)
         return obj_det_rets
+
+    def get_dummy_image(self):
+        input_shape = self.sess.get_inputs()[0].shape
+        _, _, self.input_height, self.input_width = input_shape
+        dummy_image = np.zeros((self.input_height, self.input_width, 3),
+                               dtype=np.uint8)
+        return dummy_image
