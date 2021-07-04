@@ -6,9 +6,9 @@ import numpy as np
 import cv2
 import onnxruntime
 
-from ..pose_estimation_2d_model import PoseEstimation2dModel
-from ..pose_estimation_2d_result import PoseEstimation2dResult
-from ......util.file import get_model_path
+from ...pose_estimation_2d_model import PoseEstimation2dModel
+from ...pose_estimation_2d_result import PoseEstimation2dResult
+from .......util.file import get_model_path
 
 
 class MoveNet(PoseEstimation2dModel):
