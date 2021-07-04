@@ -9,12 +9,12 @@ from .process import (pre_process,
                       validate_image,
                       validate_bbox)
 
-from ..object_detection_2d_model import ObjectDetection2DModel
-from ..object_detection_2d_result import ObjectDetection2DResult
-from ...label.object_detection_2d_label_factory import ObjectDetection2DLabelFactory
+from ...object_detection_2d_model import ObjectDetection2DModel
+from ...object_detection_2d_result import ObjectDetection2DResult
+from ....label.object_detection_2d_label_factory import ObjectDetection2DLabelFactory
 
-from ......util.file import get_model_path, download_from_google_drive
-from ......util.file import download_from_google_drive
+from .......util.file import get_model_path, download_from_google_drive
+from .......util.file import download_from_google_drive
 
 
 class YoloV4(ObjectDetection2DModel):

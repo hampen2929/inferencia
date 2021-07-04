@@ -1,4 +1,4 @@
-from .object_detection_2d_model_name import ModelName
+from .object_detection_2d_model_name import ObjectDetection2DModelName
 
 
 class ObjectDetection2DModelFactory():
@@ -8,8 +8,8 @@ class ObjectDetection2DModelFactory():
                conf_thresh=0.2,
                nms_thresh=0.4,
                label_name="COCO"):
-        if model_name == ModelName.yolov4.value:
-            from .yolo_v4.yolo_v4 import YoloV4
+        if model_name == ObjectDetection2DModelName.yolov4.value:
+            from .model.yolo_v4.yolo_v4 import YoloV4
             return YoloV4(model_path=model_path,
                           model_precision=model_precision,
                           conf_thresh=conf_thresh,
