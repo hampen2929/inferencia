@@ -43,7 +43,7 @@ class MoveNet(PoseEstimation2dModel):
     def inference(self, images: Union[np.ndarray, list]) -> list:
         pre_process_results, height, width = self.pre_process(images)
         forward_results = self.forward(pre_process_results)
-        return self.post_process(forward_results, images, height, width)
+        return self.post_process(forward_results, height, width)
 
     def pre_process(self, images):
         if len(images.shape) == 3:
@@ -68,10 +68,8 @@ class MoveNet(PoseEstimation2dModel):
 
     def post_process(self,
                      forward_results,
-                     image,
                      image_height,
                      image_width,
-                     draw=False
                      ):
         pose_est_rets = []
         for outputs in forward_results:
