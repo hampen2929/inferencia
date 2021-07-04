@@ -5,7 +5,9 @@ from .visualize_bbox import visualize_bbox
 
 
 class BBOXVisualizer(ObjectDetection2DVisualizer):
-    def visualize(image: np.ndarray,
+
+    def visualize(self,
+                  image: np.ndarray,
                   object_detection_results: list,
                   bbox_color=(0, 75, 255),
                   text_color=(0, 0, 0)) -> np.ndarray:
