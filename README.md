@@ -22,7 +22,6 @@ docker run --gpus all -it \
     -v /tmp/.X11-unix:/tmp/.X11-uni \
     -v $HOME/workspace/inferencia/:/workspace \
     --net=host \
-    -p 8888:8888 \
     inferencia_gpu \
     /bin/bash
 ```
