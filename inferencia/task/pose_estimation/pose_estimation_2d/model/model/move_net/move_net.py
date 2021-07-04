@@ -8,6 +8,8 @@ import onnxruntime
 
 from ...pose_estimation_2d_model import PoseEstimation2dModel
 from ...pose_estimation_2d_result import PoseEstimation2dResult
+
+from .process import change_ratio
 from .......util.file import get_model_path
 
 
@@ -50,6 +52,7 @@ class MoveNet(PoseEstimation2dModel):
         elif len(images.shape) == 4:
             _, height, width, _ = images.shape
 
+        images, height, width = change_ratio(images, height, width)
         frame = cv2.resize(images, (self.in_w, self.in_h))
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         frame = np.expand_dims(frame, axis=0)
