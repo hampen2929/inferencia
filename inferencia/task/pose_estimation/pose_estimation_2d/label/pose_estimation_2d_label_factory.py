@@ -9,4 +9,5 @@ class PoseEstimation2DLabelFactory():
 
         else:
             raise NotImplementedError(
-                "{} is not implemented.".format(label_name))
+                "{} is not implemented. {} can be chosen.".format(label_name, [e.value for e in PoseEstimation2DLabelName]
+                                                                  ))
