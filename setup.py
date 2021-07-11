@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 PACKAGE = 'inferencia'
 README = 'README.md'
-REQUIREMENTS = 'requirements.txt'
+# REQUIREMENTS = './docker/gpu/requirements.txt'
 
 VERSION = '0.0.1'
 
@@ -20,7 +20,7 @@ def read(fname):
 setup(name=PACKAGE,
       version=VERSION,
       # long_description=read(README),
-      install_requires=list(read(REQUIREMENTS).splitlines()),
+      #   install_requires=list(read(REQUIREMENTS).splitlines()),
       url='https://github.com/hampen2929/inferencia',
       author='hampen2929',
       author_email='yuya.mochimaru.ym@gmail.com',
