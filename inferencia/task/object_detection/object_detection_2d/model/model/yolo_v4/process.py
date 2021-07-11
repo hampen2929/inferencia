@@ -1,24 +1,7 @@
-import time
-from typing import Tuple
+from typing import Tuple, List, Union
 
 import numpy as np
 import cv2
-
-
-def validate_image(images: np.ndarray) -> list:
-    image_height, image_width = None, None
-    if isinstance(images, np.ndarray):
-        images_shape = images.shape
-        if len(images_shape) == 3:
-            "single image"
-            images = [images]
-        else:
-            msg = "image shape length must be 3 or 4. Not {}.".format(
-                len(images_shape))
-            raise ValueError(msg)
-    elif isinstance(images, list):
-        pass
-    return images
 
 
 def pre_process(images: list,
