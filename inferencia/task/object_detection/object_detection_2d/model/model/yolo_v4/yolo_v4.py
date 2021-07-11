@@ -14,7 +14,6 @@ from ...object_detection_2d_result import ObjectDetection2DResult
 from ....label.object_detection_2d_label_factory import ObjectDetection2DLabelFactory
 
 from .......util.file.file import get_model_path, download_from_google_drive
-from .......util.file.file import download_from_google_drive
 from .......util.logger.logger import Logger
 
 
