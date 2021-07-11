@@ -1,17 +1,13 @@
 from enum import Enum
 
 
-class GolfSwingLabelEnum(Enum):
+class GolfSwingLabel(Enum):
     other = 0
     swing = 1
 
-
-class GolfSwingLabel():
-    def __init__(self):
-        pass
-
-    def to_json(self):
+    @staticmethod
+    def to_json():
         label_dict = {}
-        for l in GolfSwingLabelEnum:
+        for l in GolfSwingLabel:
             label_dict[l.value] = l.name
         return label_dict
