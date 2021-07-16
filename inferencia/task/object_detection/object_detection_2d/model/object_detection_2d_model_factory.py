@@ -23,5 +23,8 @@ class ObjectDetection2DModelFactory():
                               nms_thresh=nms_thresh,
                               label_name=label_name)
         else:
-            msg = "model_name is {}, but not implemented".format(model_name)
+            msg = "{} is not implemented. Choose from {}.".format(
+                model_name,
+                ObjectDetection2DModelName.values()
+            )
             raise NotImplementedError(msg)
