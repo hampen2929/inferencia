@@ -130,3 +130,5 @@ dmypy.json
 
 sandbox/
 log/
+notebook/
+data/
