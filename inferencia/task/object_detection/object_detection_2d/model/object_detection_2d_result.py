@@ -19,3 +19,6 @@ class ObjectDetection2DResult:
                                           self.ymin,
                                           self.xmax,
                                           self.ymax)
+
+    def to_dict(self):
+        return self.__dict__
