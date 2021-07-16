@@ -1,5 +1,4 @@
 from enum import Enum
-from inferencia.task.person_reid.body_reid.model.model.osnet.model.osnet import osnet_x0_25
 
 
 class BodyReidModelName(Enum):
