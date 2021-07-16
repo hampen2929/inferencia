@@ -6,7 +6,6 @@ import onnxruntime
 
 from .process import (pre_process,
                       post_processing,
-                      validate_image,
                       validate_bbox)
 
 from ...object_detection_2d_model import ObjectDetection2DModel
@@ -15,6 +14,7 @@ from ....label.object_detection_2d_label_factory import ObjectDetection2DLabelFa
 
 from .......util.file.file import get_model_path, download_from_google_drive
 from .......util.logger.logger import Logger
+from inferencia.util.pre_process.validate import validate_image
 
 
 class YoloV4(ObjectDetection2DModel):
