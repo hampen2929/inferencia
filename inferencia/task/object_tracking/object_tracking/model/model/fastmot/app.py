@@ -117,7 +117,7 @@ def main():
     if args.mot:
         avg_fps = round(mot.frame_count / prof.duration)
         logger.info('Average FPS: %d', avg_fps)
-        # mot.print_timing_info()
+        mot.print_timing_info()
         print("avg_fps", avg_fps)
 
 
