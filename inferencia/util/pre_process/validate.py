@@ -24,5 +24,5 @@ def validate_image(image: Union[np.ndarray, List]) -> List[np.ndarray]:
                 len(images_shape))
             raise ValueError(msg)
     elif isinstance(image, list):
-        pass
+        images = image
     return images
