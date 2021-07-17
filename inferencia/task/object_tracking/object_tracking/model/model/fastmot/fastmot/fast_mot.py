@@ -123,7 +123,7 @@ class FastMOT:
                         self.tracker.apply_kalman()
                     cropped_images = []
                     for det in detections:
-                        bbox, class_id, confidence = det
+                        bbox, _, _ = det
                         xmin, ymin, xmax, ymax = bbox.astype(int)
                         cropped_image = frame[ymin: ymax,
                                               xmin: xmax]
@@ -158,18 +158,17 @@ class FastMOT:
             self._draw(frame, detections)
         self.frame_count += 1
 
-    @ staticmethod
-    def print_timing_info():
-        LOGGER.debug('=================Timing Stats=================')
-        LOGGER.debug(
+    def print_timing_info(self):
+        self.logger.info('=================Timing Stats=================')
+        self.logger.info(
             f"{'track time:':<37}{Profiler.get_avg_millis('track'):>6.3f} ms")
-        LOGGER.debug(
+        self.logger.info(
             f"{'preprocess time:':<37}{Profiler.get_avg_millis('preproc'):>6.3f} ms")
-        LOGGER.debug(
+        self.logger.info(
             f"{'detect/flow time:':<37}{Profiler.get_avg_millis('detect'):>6.3f} ms")
-        LOGGER.debug(f"{'feature extract/kalman filter time:':<37}"
-                     f"{Profiler.get_avg_millis('extract'):>6.3f} ms")
-        LOGGER.debug(
+        self.logger.info(f"{'feature extract/kalman filter time:':<37}"
+                         f"{Profiler.get_avg_millis('extract'):>6.3f} ms")
+        self.logger.info(
             f"{'association time:':<37}{Profiler.get_avg_millis('assoc'):>6.3f} ms")
 
     def _draw(self, frame, detections):
