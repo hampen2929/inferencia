@@ -14,7 +14,7 @@ class VideoReader(BaseReader):
         self.logger.info(init_msg)
 
         self.cap = cv2.VideoCapture(input_path)
-        self.__frame_index = 0
+        self.__frame_index = -1
         self.__is_open = True
         self.__break_frame_index = 1000000000000
 
@@ -50,7 +50,7 @@ class VideoReader(BaseReader):
             'set_break_frame_index as {}.'.format(break_frame_index))
 
     def __len__(self):
-        return len(self.cap.get(cv2.CAP_PROP_FRAME_COUNT))
+        return int(self.cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
     @property
     def fps(self):
@@ -66,4 +66,4 @@ class VideoReader(BaseReader):
 
     @property
     def count(self):
-        return self.cap.get(cv2.CAP_PROP_FRAME_COUNT)
+        return int(self.cap.get(cv2.CAP_PROP_FRAME_COUNT))
