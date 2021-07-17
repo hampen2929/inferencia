@@ -1,17 +1,19 @@
 import cv2
 
 
-def visualize_bbox(image,
-                   class_name,
-                   xmin,
-                   ymin,
-                   xmax,
-                   ymax,
-                   confidence,
-                   bbox_color=(0, 75, 255),
-                   text_color=(0, 0, 0)):
-    txt = '{}-{:.2f}'.format(class_name,
-                             confidence)
+def visualize_tracking(image,
+                       class_name,
+                       xmin,
+                       ymin,
+                       xmax,
+                       ymax,
+                       confidence,
+                       tracking_id,
+                       bbox_color=(0, 75, 255),
+                       text_color=(0, 0, 0)):
+    txt = '{}-{}-{:.2f}'.format(class_name,
+                                tracking_id,
+                                confidence)
     cat_size = cv2.getTextSize(
         txt, cv2.FONT_HERSHEY_SIMPLEX, 0.5, 2)[0]
 
