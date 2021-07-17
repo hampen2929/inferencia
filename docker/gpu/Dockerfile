@@ -1,4 +1,3 @@
-# FROM nvidia/cuda:10.1-cudnn7-devel-ubuntu18.04
 FROM nvcr.io/nvidia/cuda:11.1.1-cudnn8-devel-ubuntu18.04
 
 USER root
@@ -16,6 +15,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     xterm \
     vim \
     bzip2 \
+    x11-apps \
     ca-certificates \
     lsb-release \
     && rm -rf /var/lib/apt/lists/*

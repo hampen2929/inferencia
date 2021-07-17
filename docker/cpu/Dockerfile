@@ -15,6 +15,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     xterm \
     vim \
     bzip2 \
+    x11-apps \
     ca-certificates \
     lsb-release \
     && rm -rf /var/lib/apt/lists/*
@@ -82,3 +83,6 @@ ENV PATH $PATH:/home/${USERNAME}/.local/bin
 # Jupyter notebook
 RUN mkdir /home/${USERNAME}/.jupyter/
 ADD ./jupyter_notebook_config.py /home/ubuntu/.jupyter/
+
+# Path
+RUN sudo chown ubuntu:ubuntu /local/python-3.7.9/ -R

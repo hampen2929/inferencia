@@ -8,3 +8,8 @@ jupytext==1.11.3
 googledrivedownloader==0.4
 requests==2.25.1
 pytest
+pandas
+numba
+scipy
+cython
+# cython-bbox
