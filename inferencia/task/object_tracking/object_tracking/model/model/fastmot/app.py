@@ -59,9 +59,15 @@ def main():
 
     if args.mot:
         draw = args.gui or args.output_uri is not None
-        mot = FastMOT(config=config['mot'],
-                      input_fps=reader.fps,
-                      target_fps=reader.fps)
+        mot = FastMOT(
+            object_detection_model_name="TinyYoloV4",
+            multi_tracker_config=config['mot']['multi_tracker'],
+            use_iou_matching=True,
+            use_feature_extractor=True,
+            use_kalman_filter=True,
+            feature_extractor_name="osnet_x0_25",
+            input_fps=reader.fps,
+            target_fps=reader.fps)
         # mot = fastmot.MOT(config['resize_to'],
         #                   config['mot'], draw=draw, verbose=args.verbose)
         # import pdb
