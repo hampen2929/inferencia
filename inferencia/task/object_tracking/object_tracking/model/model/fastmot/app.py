@@ -8,7 +8,7 @@ import cv2
 
 # from fastmot.mot import MOT
 from fastmot.videoio import VideoIO
-from fastmot.fast_mot import FastMOT
+from fastmot.fastmot import FastMOT
 from fastmot.utils import ConfigDecoder, Profiler
 
 from inferencia.util.reader.reader_manager import ReaderManager
@@ -88,9 +88,6 @@ def main():
                     mot.step(frame_data.frame)
                     if log is not None:
                         for track in mot.visible_tracks:
-                            import pdb
-                            pdb.set_trace()
-                            pass
 
                             # tl = track.tlbr[:2] / \
                             #     config['resize_to'] * stream.resolution
@@ -99,6 +96,7 @@ def main():
                             # w, h = br - tl + 1
                             # log.write(f'{mot.frame_count},{track.trk_id},{tl[0]:.6f},{tl[1]:.6f},'
                             #           f'{w:.6f},{h:.6f},-1,-1,-1\n')
+                            pass
 
                 if args.gui:
                     cv2.imshow('Video', frame_data.frame)

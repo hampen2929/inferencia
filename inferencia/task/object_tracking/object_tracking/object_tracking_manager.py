@@ -5,12 +5,27 @@ from .visualization.object_tracking_visualizer_factory import ObjectTrackingVisu
 
 class ObjectTrackingManager():
 
-    def get_model(model_name="SORT",
-                  conf_thresh=0.2,
-                  label_name="COCO"):
-        return ObjectTrackingModelFactory.create(model_name,
-                                                 conf_thresh,
-                                                 label_name)
+    def get_model(
+        multi_tracker_config_path,
+        input_fps: int,
+        target_fps: int,
+        object_tracking_model_name="FastMOT",
+        object_detection_model_name: str = "TinyYoloV4",
+        feature_extractor_name: str = "osnet_x0_25",
+        use_iou_matching: bool = True,
+        use_feature_extractor: bool = True,
+        use_kalman_filter: bool = True,
+    ):
+        return ObjectTrackingModelFactory.create(object_tracking_model_name=object_tracking_model_name,
+                                                 multi_tracker_config_path=multi_tracker_config_path,
+                                                 object_detection_model_name=object_detection_model_name,
+                                                 use_iou_matching=use_iou_matching,
+                                                 use_feature_extractor=use_feature_extractor,
+                                                 use_kalman_filter=use_kalman_filter,
+                                                 feature_extractor_name=feature_extractor_name,
+                                                 input_fps=input_fps,
+                                                 target_fps=target_fps
+                                                 )
 
     def get_visualizer(visualizer_name="TrackingVisualizer"):
         return ObjectTrackingVisualizerFactory.create(visualizer_name)

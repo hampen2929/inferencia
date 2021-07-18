@@ -14,6 +14,7 @@ from inferencia.util.logger.logger import Logger
 DET_DTYPE = np.dtype(
     [('tlbr', float, 4),
      ('label', int),
+     ('label_name', 'U30'),
      ('conf', float)],
     align=True
 )
@@ -38,9 +39,14 @@ class FastMOT:
     """
 
     def __init__(self,
-                 config,
-                 input_fps,
-                 target_fps,
+                 object_detection_model_name: str,
+                 multi_tracker_config: dict,
+                 use_iou_matching: bool,
+                 use_feature_extractor: bool,
+                 use_kalman_filter: bool,
+                 feature_extractor_name: str,
+                 input_fps: int,
+                 target_fps: int,
                  ):
         self.logger = Logger(__class__.__name__)
         init_msg = "\n===================== \n Initialize FastMOT \n=====================\n"
@@ -51,12 +57,15 @@ class FastMOT:
         self.verbose = False
 
         self.detector = ObjectDetection2DManager.get_model(
-            model_name="TinyYoloV4")
+            model_name=object_detection_model_name
+        )
 
-        self.extractor = BodyReidManager.get_model()
+        self.extractor = BodyReidManager.get_model(
+            model_name=feature_extractor_name
+        )
         self.tracker = MultiTracker(size=self.size,
                                     metric="cosine",
-                                    config=config['multi_tracker'])
+                                    config=multi_tracker_config)
         self.frame_count = 0
         self.detector_frame_skip = round(input_fps / target_fps)
 
@@ -94,6 +103,7 @@ class FastMOT:
                     (np.array([det_ret.xmin, det_ret.ymin,
                                det_ret.xmax, det_ret.ymax]),
                      det_ret.class_id,
+                     det_ret.class_name,
                      det_ret.confidence)
                 )
             detections = np.asarray(det_post,
@@ -102,9 +112,10 @@ class FastMOT:
             self.tracker.init(frame, detections)
         else:
             if self.frame_count % self.detector_frame_skip == 0:
+                # with Profiler('compute_flow'):
+                #     self.tracker.compute_flow(frame)
+
                 with Profiler('detect'):
-                    with Profiler('track'):
-                        self.tracker.compute_flow(frame)
                     det_rets = self.detector.inference(frame)
 
                     det_post = []
@@ -113,17 +124,19 @@ class FastMOT:
                             (np.array([det_ret.xmin, det_ret.ymin,
                                        det_ret.xmax, det_ret.ymax]),
                              det_ret.class_id,
+                             det_ret.class_name,
                              det_ret.confidence)
                         )
                     detections = np.asarray(det_post,
                                             dtype=DET_DTYPE).view(np.recarray)
 
+                with Profiler('apply_kalman', aggregate=True):
+                    self.tracker.apply_kalman()
+
                 with Profiler('extract'):
-                    with Profiler('track', aggregate=True):
-                        self.tracker.apply_kalman()
                     cropped_images = []
                     for det in detections:
-                        bbox, _, _ = det
+                        bbox, _, _, _ = det
                         xmin, ymin, xmax, ymax = bbox.astype(int)
                         cropped_image = frame[ymin: ymax,
                                               xmin: xmax]
@@ -135,28 +148,18 @@ class FastMOT:
                     embeddings = np.array(embeddings)
 
                 with Profiler('assoc'):
-                    self.tracker.update(
-                        self.frame_count, detections, embeddings)
+                    self.tracker.update(self.frame_count,
+                                        detections,
+                                        embeddings)
             else:
                 with Profiler('track'):
                     self.tracker.track(frame)
 
-            # import pdb
-            # pdb.set_trace()
-            print(self.tracker.tracks)
-
-            # detections
-            # <class 'numpy.recarray'>
-            # rec.array([([208., 300., 570., 609.], 1, 0.98401898)],dtype={'names':['tlbr','label','conf'], 'formats':[('<f8', (4,)),'<i8','<f8'], 'offsets':[0,32,40], 'itemsize':48, 'aligned':True})
-
-            # embeddings
-            # (1, 512)
-            # float32
-            # np.ndarray
-
         if self.draw:
             self._draw(frame, detections)
         self.frame_count += 1
+
+        return self.tracker.tracks
 
     def print_timing_info(self):
         self.logger.info('=================Timing Stats=================')
@@ -164,9 +167,13 @@ class FastMOT:
             f"{'track time:':<37}{Profiler.get_avg_millis('track'):>6.3f} ms")
         self.logger.info(
             f"{'preprocess time:':<37}{Profiler.get_avg_millis('preproc'):>6.3f} ms")
+        self.logger.info(f"{'compute_flow time:':<37}"
+                         f"{Profiler.get_avg_millis('compute_flow'):>6.3f} ms")
+        self.logger.info(f"{'apply_kalman time:':<37}"
+                         f"{Profiler.get_avg_millis('apply_kalman'):>6.3f} ms")
         self.logger.info(
             f"{'detect/flow time:':<37}{Profiler.get_avg_millis('detect'):>6.3f} ms")
-        self.logger.info(f"{'feature extract/kalman filter time:':<37}"
+        self.logger.info(f"{'feature extract time:':<37}"
                          f"{Profiler.get_avg_millis('extract'):>6.3f} ms")
         self.logger.info(
             f"{'association time:':<37}{Profiler.get_avg_millis('assoc'):>6.3f} ms")

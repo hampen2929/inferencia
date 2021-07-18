@@ -5,12 +5,13 @@ from .utils.rect import get_center
 
 
 class Track:
-    def __init__(self, frame_id, trk_id, tlbr, state, label):
+    def __init__(self, frame_id, trk_id, tlbr, state, label, label_name):
         self.start_frame = frame_id
         self.trk_id = trk_id
         self.tlbr = tlbr
         self.state = state
         self.label = label
+        self.label_name = label_name
 
         self.age = 0
         self.hits = 0
@@ -22,8 +23,9 @@ class Track:
         self.prev_keypoints = np.empty((0, 2), np.float32)
 
     def __str__(self):
-        coord = get_center(self.tlbr).astype(int)
-        return f'{LABEL_MAP[self.label]} {self.trk_id:>3} at ({coord[0]:>4}, {coord[1]:>3})'
+        # coord = get_center(self.tlbr).astype(int)
+        # return f'{self.label_name} {self.trk_id:>3} at ({coord[0]:>4}, {coord[1]:>3})'
+        return f'{self.label_name} {self.tlbr}'
 
     def __repr__(self):
         return self.__str__()
@@ -64,5 +66,6 @@ class Track:
         if self.smooth_feature is None:
             self.smooth_feature = embedding
         else:
-            self.smooth_feature = self.alpha * self.smooth_feature + (1. - self.alpha) * embedding
+            self.smooth_feature = self.alpha * \
+                self.smooth_feature + (1. - self.alpha) * embedding
             self.smooth_feature /= np.linalg.norm(self.smooth_feature)

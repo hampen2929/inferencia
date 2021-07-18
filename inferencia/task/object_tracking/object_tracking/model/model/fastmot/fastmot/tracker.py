@@ -8,7 +8,7 @@ from scipy.spatial.distance import cdist
 from cython_bbox import bbox_overlaps
 
 from .track import Track
-from .flow import Flow
+# from .flow import Flow
 from .kalman_filter import MeasType, KalmanFilter
 from .utils.rect import as_rect, to_tlbr, iom
 
@@ -85,7 +85,8 @@ class MultiTracker:
         # self.flow.init(frame)
         for det in detections:
             state = self.kf.create(det.tlbr)
-            new_trk = Track(0, self.next_id, det.tlbr, state, det.label)
+            new_trk = Track(0, self.next_id, det.tlbr,
+                            state, det.label, det.label_name)
             self.tracks[self.next_id] = new_trk
             LOGGER.debug(f"{'Detected:':<14}{new_trk}")
             self.next_id += 1
@@ -98,7 +99,7 @@ class MultiTracker:
         frame : ndarray
             The next frame.
         """
-        self.compute_flow(frame)
+        # self.compute_flow(frame)
         self.apply_kalman()
 
     def compute_flow(self, frame):
@@ -112,7 +113,7 @@ class MultiTracker:
         active_tracks = [
             track for track in self.tracks.values() if track.active]
         # self.flow_bboxes, self.homography = self.flow.predict(frame, active_tracks)
-        print(self.homography)
+        # print(self.homography)
         # if self.homography is None:
         # clear tracks when camera motion cannot be estimated
         # self.tracks.clear()
@@ -240,7 +241,8 @@ class MultiTracker:
         for det_id in u_det_ids:
             det = detections[det_id]
             state = self.kf.create(det.tlbr)
-            new_trk = Track(frame_id, self.next_id, det.tlbr, state, det.label)
+            new_trk = Track(frame_id, self.next_id, det.tlbr,
+                            state, det.label, det.label_name)
             self.tracks[self.next_id] = new_trk
             LOGGER.debug(f"{'Detected:':<14}{new_trk}")
             updated.append(self.next_id)
