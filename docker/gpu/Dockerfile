@@ -58,6 +58,9 @@ RUN apt-get update && apt-get upgrade -y \
     && /usr/local/bin/python-build -v $PYTHON_VERSION $PYTHON_ROOT \
     && rm -rf $PYENV_ROOT
 
+# Path
+RUN sudo chown ubuntu:ubuntu /local/python-3.7.9/ -R
+
 # CMAKE
 RUN apt-get update
 RUN sudo apt remove cmake -y
@@ -76,13 +79,21 @@ RUN mkdir -p $TEMP_DIR && cd $TEMP_DIR \
 USER ${USERNAME}
 ENV PROJECT_DIR /workspace/
 WORKDIR ${PROJECT_DIR}
-ADD ./requirements.txt ${PROJECT_DIR}
-RUN pip install -r requirements.txt
+
+RUN pip install --upgrade pip
+
+ADD ./requirements_prod.txt ${PROJECT_DIR}
+RUN pip install -r requirements_prod.txt
+
+ADD ./requirements_dev.txt ${PROJECT_DIR}
+RUN pip install -r requirements_dev.txt
+
+ADD ./requirements_other.txt ${PROJECT_DIR}
+RUN pip install -r requirements_other.txt
+
 ENV PATH $PATH:/home/${USERNAME}/.local/bin
 
 # Jupyter notebook
 RUN mkdir /home/${USERNAME}/.jupyter/
 ADD ./jupyter_notebook_config.py /home/ubuntu/.jupyter/
 
-# Path
-RUN sudo chown ubuntu:ubuntu /local/python-3.7.9/ -R

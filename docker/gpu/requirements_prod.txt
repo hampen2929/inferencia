@@ -1,15 +1,11 @@
+# must
 onnx==1.9.0
 onnxruntime-gpu==1.8.0
 numpy==1.21.0
-matplotlib==3.4.2
 opencv-python==4.5.2.54
-jupyter==1.0.0
-jupytext==1.11.3
+matplotlib==3.4.2
 googledrivedownloader==0.4
 requests==2.25.1
-pytest
-pandas
 numba
-scipy
 cython
-# cython-bbox
+scipy
