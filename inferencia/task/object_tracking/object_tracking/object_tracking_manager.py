@@ -15,6 +15,7 @@ class ObjectTrackingManager():
         use_iou_matching: bool = True,
         use_feature_extractor: bool = True,
         use_kalman_filter: bool = True,
+        max_hold_ret_num: int = 100
     ):
         return ObjectTrackingModelFactory.create(object_tracking_model_name=object_tracking_model_name,
                                                  multi_tracker_config_path=multi_tracker_config_path,
@@ -24,7 +25,8 @@ class ObjectTrackingManager():
                                                  use_kalman_filter=use_kalman_filter,
                                                  feature_extractor_name=feature_extractor_name,
                                                  input_fps=input_fps,
-                                                 target_fps=target_fps
+                                                 target_fps=target_fps,
+                                                 max_hold_ret_num=max_hold_ret_num,
                                                  )
 
     def get_visualizer(visualizer_name="TrackingVisualizer"):

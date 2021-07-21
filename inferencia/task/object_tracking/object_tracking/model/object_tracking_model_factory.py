@@ -25,7 +25,9 @@ class ObjectTrackingModelFactory():
                use_kalman_filter: bool,
                feature_extractor_name: str,
                input_fps: int,
-               target_fps: int):
+               target_fps: int,
+               max_hold_ret_num: int,
+               ):
         if object_tracking_model_name == ObjectTrackingModelName.fastmot.value:
             from .model.fastmot.fastmot_model import FastMOTModel
             with open(multi_tracker_config_path) as cfg_file:
@@ -39,7 +41,9 @@ class ObjectTrackingModelFactory():
                                 use_kalman_filter,
                                 feature_extractor_name,
                                 input_fps,
-                                target_fps)
+                                target_fps,
+                                max_hold_ret_num,
+                                )
         else:
             msg = "{} is not implemented. Choose from {}.".format(object_tracking_model_name,
                                                                   ObjectTrackingModelName.values())

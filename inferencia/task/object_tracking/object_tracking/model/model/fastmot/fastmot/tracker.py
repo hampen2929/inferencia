@@ -86,7 +86,8 @@ class MultiTracker:
         for det in detections:
             state = self.kf.create(det.tlbr)
             new_trk = Track(0, self.next_id, det.tlbr,
-                            state, det.label, det.label_name)
+                            state, det.label, det.label_name,
+                            det.conf)
             self.tracks[self.next_id] = new_trk
             LOGGER.debug(f"{'Detected:':<14}{new_trk}")
             self.next_id += 1
@@ -242,7 +243,8 @@ class MultiTracker:
             det = detections[det_id]
             state = self.kf.create(det.tlbr)
             new_trk = Track(frame_id, self.next_id, det.tlbr,
-                            state, det.label, det.label_name)
+                            state, det.label, det.label_name,
+                            det.conf)
             self.tracks[self.next_id] = new_trk
             LOGGER.debug(f"{'Detected:':<14}{new_trk}")
             updated.append(self.next_id)

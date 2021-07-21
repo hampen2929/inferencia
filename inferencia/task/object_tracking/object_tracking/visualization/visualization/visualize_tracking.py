@@ -11,6 +11,11 @@ def visualize_tracking(image,
                        tracking_id,
                        bbox_color=(0, 75, 255),
                        text_color=(0, 0, 0)):
+    xmin = int(xmin)
+    ymin = int(ymin)
+    xmax = int(xmax)
+    ymax = int(ymax)
+
     txt = '{}-{}-{:.2f}'.format(class_name,
                                 tracking_id,
                                 confidence)
