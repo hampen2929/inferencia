@@ -8,29 +8,34 @@ from ..base_reader import BaseReader
 
 class VideoReader(BaseReader):
 
-    def __init__(self, input_path):
+    def __init__(self, input_path, target_fps=None):
         self.logger = Logger(__class__.__name__)
         init_msg = "\n===================== \n Initialize Reader \n=====================\n"
         self.logger.info(init_msg)
 
         self.cap = cv2.VideoCapture(input_path)
         self.__frame_index = -1
+        self.__global_frame_index = -1
         self.__is_open = True
-        self.__break_frame_index = 1000000000000
+        # self.__break_frame_index = 1000000000000
+        if target_fps is not None:
+            self.skip_num = round(self.fps / target_fps)
+        else:
+            self.skip_num = 1
+
+        self.logger.info({"skip_num": self.skip_num})
 
     def is_open(self):
         return self.__is_open
 
     def read(self):
-        # for frame_num in range(len(self.file_paths[self.frame_index])):
-        ret, frame = self.cap.read()
-        if self.__break_frame_index <= self.__frame_index:
-            ret = False
-        if not ret:
-            self.is_open = False
+        while True:
+            ret, frame = self.cap.read()
+            self.__global_frame_index += 1
+            if self.__global_frame_index % self.skip_num == 0:
+                break
         self.__frame_index += 1
         frame_index_str = format_frame_index(self.__frame_index)
-        # self.logger.info('frame_index is {}.'.format(self.__frame_index))
         frame_data = FrameData(ret=ret,
                                frame=frame,
                                frame_height=self.height,
@@ -67,3 +72,7 @@ class VideoReader(BaseReader):
     @property
     def count(self):
         return int(self.cap.get(cv2.CAP_PROP_FRAME_COUNT))
+
+    @property
+    def is_opened(self):
+        return self.cap.isOpened()

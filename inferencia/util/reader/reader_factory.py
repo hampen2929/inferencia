@@ -5,11 +5,11 @@ from .reader.video_reader import VideoReader
 class ReaderFactory():
     video_exts = [".mp4", ".avi", ".mov", ".MOV", ".mkv"]
 
-    def create(target_input):
+    def create(target_input, target_fps):
         if osp.isfile(target_input):
             ext = osp.splitext(target_input)[1]
             if ext in ReaderFactory.video_exts:
-                return VideoReader(target_input)
+                return VideoReader(target_input, target_fps)
             else:
                 msg = "{} is not supported. {} are supported.".format(
                     ext, ReaderFactory.video_exts)
