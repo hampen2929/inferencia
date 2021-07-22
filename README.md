@@ -48,37 +48,48 @@ python setup.py develop
 ```
 
 # Directory
+## command
+```
+tree -d -L 2 -I '__pycache__'
+```
+## tree
 ```
 inferencia
 ├── task
+│   ├── action_recognition
+│   │   ├── action_recognition
+│   │   └── skelton_based_action_recognition
+│   ├── face_recognition
+│   │   ├── age_estimation
+│   │   ├── emotion_recognition
+│   │   ├── gaze_estimation
+│   │   └── head_pose_estimation
 │   ├── image_classification
-│   │   ├── image_classification
-│   │   │   ├── ResNet
-│   │   │   └── EfficientNet
+│   │   └── image_classification
+│   ├── image_generation
+│   ├── image_super_resolution
+│   │   └── single_image_super_resolution
+│   ├── instance_segmentation
 │   ├── object_detection
-│   │   ├── face_detection
-│   │   ├── person_detection
-│   │   └── object_detection
-│   │       ├── factory
-│   │       ├── label
-│   │       ├── model
-│   │       │   ├── yolo_v4
-│   │       │   └── center_net
+│   │   ├── object_detection_2d
+│   │   └── object_detection_3d
+│   ├── object_tracking
+│   │   └── object_tracking
+│   ├── person_reid
+│   │   └── body_reid
 │   ├── pose_estimation
 │   │   ├── pose_estimation_2d
-│   │       └── move_net
 │   │   └── pose_estimation_3d
-│   └── action_recognition
-│       ├── cnn
-│       ├── gcn
-│       └── tree
-├── util
-
-
-
-PackageA
-├── service
-│   ├── A
-│   ├── B
-│   └── C
+│   └── tmp
+│       └── tmp
 └── util
+    ├── color
+    ├── file
+    ├── formatter
+    ├── label
+    ├── logger
+    ├── pre_process
+    └── reader
+        └── reader
+```
+
