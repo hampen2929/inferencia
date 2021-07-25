@@ -7,6 +7,8 @@ class PoseEstimation2dResult:
     pose: np.ndarray
     pose_norm: np.ndarray
     outputs: np.ndarray
+    heatmap: np.ndarray
+    query_location: np.ndarray
     image_height: int
     image_width: int
 
