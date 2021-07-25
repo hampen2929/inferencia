@@ -10,6 +10,7 @@ from ...pose_estimation_2d_result import PoseEstimation2dResult
 
 from .post_process import get_final_preds
 
+from inferencia.util.logger.logger import Logger
 from inferencia.util.file.file import get_model_path
 from inferencia.util.file.file import download_from_google_drive
 from inferencia.util.pre_process.normalize import normalize
@@ -18,6 +19,15 @@ from inferencia.util.pre_process.validate import validate_image
 
 
 class TransPoseModel(PoseEstimation2dModel):
+    # Must
+    task_major_name = "PoseEstimation"
+    task_minor_name = "PoseEstimation2D"
+    model_name = "TransPose"
+    model_detail_name = "TransPose"
+    input_width = None
+    input_height = None
+    weight_url = "1Ks0Y4HILXhOdej8kgoTcuLYARI8z1NoQ"
+
     input_names = ["actual_input_1"] + ["learned_%d" % i for i in range(16)]
     output_names = ["output1"]
 
@@ -26,10 +36,48 @@ class TransPoseModel(PoseEstimation2dModel):
                  model_precision: str,
                  test_blur_kernel: int = 3
                  ):
+        self.logger = Logger(__class__.__name__)
+        init_msg = "\n===================== \n Initialize {}-{}-{} \n=====================\n".format(self.task_minor_name,
+                                                                                                     self.model_name,
+                                                                                                     self.model_detail_name)
+        self.logger.info(init_msg)
+
+        model_path = self.get_model_path(model_path,
+                                         self.task_major_name,
+                                         self.task_minor_name,
+                                         self.model_name,
+                                         self.model_detail_name,
+                                         model_precision)
+        self.download_model(self.weight_url, model_path)
+
         self.sess = ort.InferenceSession(model_path)
         _, _, in_h, in_w = self.sess.get_inputs()[0].shape
         self.in_size = (in_h, in_w)
         self.test_blur_kernel = test_blur_kernel
+
+    def get_model_path(self,
+                       model_path,
+                       task_major_name,
+                       task_minor_name,
+                       model_name,
+                       model_detail_name,
+                       model_precision):
+        if model_path is None:
+            model_path = get_model_path(task_major_name,
+                                        task_minor_name,
+                                        model_name,
+                                        model_detail_name,
+                                        model_precision)
+        else:
+            pass
+        return model_path
+
+    def download_model(self, weight_url, model_path):
+        if not osp.exists(model_path):
+            download_from_google_drive(weight_url, model_path)
+            msg = "download weight from {weight_url} and save to {model_path}".format(weight_url=weight_url,
+                                                                                      model_path=model_path)
+            self.logger.info(msg)
 
     def pre_process(self, images: Union[np.ndarray, List]) -> np.ndarray:
         """Resize, normalize and transform for forward input
