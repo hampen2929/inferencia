@@ -92,4 +92,57 @@ inferencia
     └── reader
         └── reader
 ```
+## abstract tree
+```
+inferencia
+└── task
+    └── main_task
+        └── sub_task
+            ├── sub_task_manager.py
+            ├── label
+            │   ├── sub_task_label_factory.py
+            │   ├── sub_task_label_name.py
+            │   └── label
+            │       └── sub_task_label.py
+            ├── model
+            │   ├── sub_task_model_factory.py
+            │   ├── sub_task_model_name.py
+            │   ├── sub_task_model.py
+            │   ├── sub_task_result.py
+            │   └── model
+            │       └── method
+            │           └── method_model.py
+            └── visualization
+                ├── sub_task_visualizer_factory.py
+                ├── sub_task_visualizer_name.py
+                ├── sub_task_visualizer.py
+                └── visualization
+                    └── sub_task_visualizer.py
+```
+
+# Develop
+Branch is associate to one model
+
+- Model develop
+  - Directory
+    - task/main_task/model/model/method/
+
+
+  - Rule
+    - MethodModel class in method_model.py inherits SubTaskModel class in sub_task_model.py
+    - Add method name to SubTaskModelName in sub_task_model_name.py
+    - Add method to SubTaskModelFactory in sub_task_model_factory.py
+    - Add method to SubTaskManager in sub_task_manager.py
+
+  - Other
+    - Add label and visualize if need.
+
+- Test
+  - Must
+    - MethodModel input and output
+    - SubTaskModelName
+    - SubTaskModelFactory
+    - SubTaskManager
+
+
 
