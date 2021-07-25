@@ -13,6 +13,6 @@ class PoseEstimation2DVisualizerFactory():
             pose_visualizer = PoseVilualizer(body_edges=pose_label.body_edges)
             return pose_visualizer
         else:
-            msg = "model_name is {}, but not implemented".format(
+            msg = "{} is not implemented".format(
                 visualizer_name)
             raise NotImplementedError(msg)
