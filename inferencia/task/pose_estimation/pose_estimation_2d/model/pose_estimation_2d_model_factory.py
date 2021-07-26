@@ -10,10 +10,11 @@ class PoseEstimation2DModelFactory():
             return MoveNetThunder(model_path=model_path,
                                   model_precision=model_precision)
 
-        elif model_name == PoseEstimationModelName.move_net_lightning.value:
-            msg = "model_name is {}, but not implemented".format(model_name)
-            raise NotImplementedError(msg)
+        elif model_name == PoseEstimationModelName.trans_pose.value:
+            from .model.trans_pose.trans_pose_model import TransPoseModel
+            return TransPoseModel(model_path=model_path,
+                                  model_precision=model_precision)
 
         else:
-            msg = "model_name is {}, but not implemented".format(model_name)
+            msg = "{} is not implemented".format(model_name)
             raise NotImplementedError(msg)
