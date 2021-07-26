@@ -51,8 +51,7 @@ class TransPoseModel(PoseEstimation2dModel):
         self.download_model(self.weight_url, model_path)
 
         self.sess = ort.InferenceSession(model_path)
-        _, _, in_h, in_w = self.sess.get_inputs()[0].shape
-        self.in_size = (in_h, in_w)
+        _, _, self.in_h, self.in_w = self.sess.get_inputs()[0].shape
         self.test_blur_kernel = test_blur_kernel
 
     def get_model_path(self,
@@ -94,8 +93,8 @@ class TransPoseModel(PoseEstimation2dModel):
         for image in images:
             image_sizes.append(image.shape)
             image = resize(image,
-                           height=self.in_size[0],
-                           width=self.in_size[1],)
+                           height=self.in_h,
+                           width=self.in_w)
             image = normalize(image)
             image_arr.append(image)
         image_arr = np.array(image_arr)
@@ -139,8 +138,8 @@ class TransPoseModel(PoseEstimation2dModel):
                                              transform_back=False,
                                              test_blur_kernel=self.test_blur_kernel)
 
-            pose_x = (preds[0][:, 0] * image_size[1] / self.in_size[1]) * 4
-            pose_y = (preds[0][:, 1] * image_size[0] / self.in_size[0]) * 4
+            pose_x = (preds[0][:, 0] * image_size[1] / self.in_w) * 4
+            pose_y = (preds[0][:, 1] * image_size[0] / self.in_h) * 4
             confidence = maxvals[0][:, 0]
 
             pose_ret[:, 0] = pose_x
