@@ -1,30 +1,51 @@
+from typing import Any
+
 import cv2
 
 
-def visualize_pose(image,
-                   pose,
-                   body_edges,
-                   line_color=(255, 196, 77),
-                   edge_color=(0, 75, 255)):
+def visualize_pose(
+    image,
+    pose,
+    body_edges,
+    line_color=(255, 196, 77),
+    edge_color=(0, 75, 255),
+    line_width: Any = None,
+    circle_size: Any = None,
+):
     """
     pose: np.array
     shape is (edge_num, 3)
     [x, y, conf]
 
     """
+    if line_width is None or circle_size is None:
+        h, w, _ = image.shape
+        if line_width is None:
+            line_width = int(h / 100) + 1
+        if circle_size is None:
+            circle_size = int(h / 100) + 2
     pose = pose.T
     was_found = pose[2, :] > 0
     for edge in body_edges:
         if was_found[edge[0]] and was_found[edge[1]]:
-            cv2.line(image,
-                     tuple(pose[0:2, edge[0]].astype(int)),
-                     tuple(pose[0:2, edge[1]].astype(int)),
-                     line_color, 4, cv2.LINE_AA)
+            cv2.line(
+                image,
+                tuple(pose[0:2, edge[0]].astype(int)),
+                tuple(pose[0:2, edge[1]].astype(int)),
+                line_color,
+                line_width,
+                cv2.LINE_AA,
+            )
     for kpt_id in range(pose.shape[1]):
         if pose[2, kpt_id] != -1:
-            cv2.circle(image,
-                       tuple(pose[0:2, kpt_id].astype(int)),
-                       3, edge_color, -1, cv2.LINE_AA)
+            cv2.circle(
+                image,
+                tuple(pose[0:2, kpt_id].astype(int)),
+                circle_size,
+                edge_color,
+                -1,
+                cv2.LINE_AA,
+            )
     return image
 
 

@@ -1,16 +1,17 @@
 import cv2
-
 from inferencia.util.formatter.format_frame_index import format_frame_index
 from inferencia.util.logger.logger import Logger
-from ..frame_data import FrameData
+
 from ..base_reader import BaseReader
+from ..frame_data import FrameData
 
 
 class VideoReader(BaseReader):
-
     def __init__(self, input_path, target_fps=None):
         self.logger = Logger(__class__.__name__)
-        init_msg = "\n===================== \n Initialize Reader \n=====================\n"
+        init_msg = (
+            "\n===================== \n Initialize Reader \n=====================\n"
+        )
         self.logger.info(init_msg)
 
         self.cap = cv2.VideoCapture(input_path)
@@ -36,13 +37,15 @@ class VideoReader(BaseReader):
                 break
         self.__frame_index += 1
         frame_index_str = format_frame_index(self.__frame_index)
-        frame_data = FrameData(ret=ret,
-                               frame=frame,
-                               frame_height=self.height,
-                               frame_width=self.width,
-                               frame_index=self.__frame_index,
-                               frame_index_str=frame_index_str,
-                               frame_path=None)
+        frame_data = FrameData(
+            ret=ret,
+            frame=frame,
+            frame_height=self.height,
+            frame_width=self.width,
+            frame_index=self.__frame_index,
+            frame_index_str=frame_index_str,
+            frame_path=None,
+        )
         return frame_data
 
     def forward_frame_index(self, frame_index):
@@ -51,8 +54,7 @@ class VideoReader(BaseReader):
 
     def set_break_frame_index(self, break_frame_index):
         self.__break_frame_index = break_frame_index
-        self.logger.info(
-            'set_break_frame_index as {}.'.format(break_frame_index))
+        self.logger.info("set_break_frame_index as {}.".format(break_frame_index))
 
     def __len__(self):
         return int(self.cap.get(cv2.CAP_PROP_FRAME_COUNT))
