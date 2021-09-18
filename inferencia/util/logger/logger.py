@@ -1,39 +1,42 @@
 # -*- coding: UTF-8 -*-
+import inspect
 import os
 import os.path as osp
-from logging import Formatter, handlers, StreamHandler, getLogger, DEBUG, WARN, INFO
-import inspect
+from logging import (DEBUG, INFO, WARN, Formatter, StreamHandler, getLogger,
+                     handlers)
 
 
 class Logger:
-    def __init__(self,
-                 name=__name__,
-                 logger_level=INFO,  # DEBUG
-                 handler_level=INFO,
-                 sthandler_level=INFO,  # DEBUG
-                 ):
+    def __init__(
+        self,
+        name=__name__,
+        logger_level=INFO,  # DEBUG
+        handler_level=INFO,
+        sthandler_level=INFO,  # DEBUG
+    ):
         # ロガー生成
         self.logger = getLogger(name)
         self.logger.setLevel(logger_level)
         self.logger.propagate = False
-        formatter = Formatter(fmt="%(asctime)s.%(msecs)03d %(levelname)7s %(message)s [%(name)s  %(processName)s - %(threadName)s]",
-                              datefmt="%Y/%m/%d %H:%M:%S")
+        formatter = Formatter(
+            fmt="%(asctime)s.%(msecs)03d %(levelname)7s %(message)s [%(name)s  %(processName)s - %(threadName)s]",
+            datefmt="%Y/%m/%d %H:%M:%S",
+        )
 
         # 時刻ローテーション
-        file_path = '/workspace/log/{}.log'.format(__name__)
+        file_path = "log/{}.log".format(__name__)
         os.makedirs(osp.dirname(file_path), exist_ok=True)
         if not self.logger.hasHandlers():
-            handler = handlers.TimedRotatingFileHandler(filename=file_path,
-                                                        encoding='UTF-8',
-                                                        when='D',
-                                                        backupCount=7)
+            handler = handlers.TimedRotatingFileHandler(
+                filename=file_path, encoding="UTF-8", when="D", backupCount=7
+            )
             # サイズローテーション
-            '''
+            """
             handler = handlers.RotatingFileHandler(filename='/var/log/inferencia_package/{}.log'.format(__name__),
                                                 encoding='UTF-8',
                                                 maxBytes=1048576,
                                                 backupCount=3)
-            '''
+            """
             # ログファイル設定
             handler.setLevel(handler_level)
             handler.setFormatter(formatter)

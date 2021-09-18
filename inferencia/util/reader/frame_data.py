@@ -1,7 +1,8 @@
 from dataclasses import dataclass
 from pathlib import Path
-import numpy as np
+
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 @dataclass
